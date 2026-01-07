@@ -1,0 +1,2 @@
+"""Infrastructure layer - External integrations and technical implementations."""
+
