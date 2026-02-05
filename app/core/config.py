@@ -59,6 +59,11 @@ class Settings(BaseSettings):
         default=True,
         description="Automatically index movies when application starts"
     )
+
+    enable_cache: bool = Field(
+        default=True,
+        description="Enable caching for indexed movies"
+    )
     
     @field_validator("movie_directory")
     @classmethod

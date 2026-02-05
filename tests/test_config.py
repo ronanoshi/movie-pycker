@@ -58,6 +58,7 @@ def test_settings_load_from_env_vars(env_vars: dict, temp_movie_directory: Path)
         assert settings.movie_directory == temp_movie_directory
         assert settings.omdb_api_key == "test_api_key_123"
         assert settings.auto_index_on_startup is True  # Default value
+        assert settings.enable_cache is True  # Default value
 
 
 def test_settings_default_values(env_vars: dict) -> None:
@@ -67,6 +68,7 @@ def test_settings_default_values(env_vars: dict) -> None:
         
         assert settings.cache_file is None  # Default None
         assert settings.auto_index_on_startup is True  # Default True
+        assert settings.enable_cache is True  # Default True
 
 
 def test_settings_case_insensitive(env_vars: dict, temp_movie_directory: Path) -> None:
@@ -134,6 +136,15 @@ def test_settings_auto_index_can_be_false(env_vars: dict) -> None:
     with patch.dict(os.environ, env_vars, clear=True):
         settings = Settings(_env_file=None)
         assert settings.auto_index_on_startup is False
+
+
+def test_settings_enable_cache_can_be_false(env_vars: dict) -> None:
+    """Test that enable_cache can be set to False."""
+    env_vars["ENABLE_CACHE"] = "false"
+
+    with patch.dict(os.environ, env_vars, clear=True):
+        settings = Settings(_env_file=None)
+        assert settings.enable_cache is False
 
 
 def test_settings_cache_file_path(env_vars: dict) -> None:

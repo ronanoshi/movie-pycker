@@ -9,20 +9,10 @@ from fastapi import FastAPI
 from app.api.movies import router as movies_router
 from app.core.config import get_settings
 from app.infrastructure.cache import InMemoryCache
-from app.infrastructure.media_info import PyMediaInfoExtractor
-from app.infrastructure.omdb_client import OMDbClient
-from app.services.indexer import Indexer
-from app.services.metadata_enrichment import MetadataEnrichmentService
-
+from app.services.library_loader import load_library
 
 async def _index_movies(settings, cache: InMemoryCache) -> None:
-    extractor = PyMediaInfoExtractor()
-    indexer = Indexer(extractor)
-    movie_files = indexer.scan_directory(settings.movie_directory)
-
-    omdb_client = OMDbClient(api_key=settings.omdb_api_key)
-    enrichment = MetadataEnrichmentService(omdb_client, cache)
-    await enrichment.enrich_movies(movie_files)
+    await load_library(settings, cache)
 
 
 @asynccontextmanager
@@ -34,7 +24,7 @@ async def lifespan(app: FastAPI):
     app.state.settings = settings
 
     index_task = None
-    if settings.auto_index_on_startup:
+    if settings.auto_index_on_startup and settings.enable_cache:
         index_task = asyncio.create_task(_index_movies(settings, cache))
         app.state.index_task = index_task
 
