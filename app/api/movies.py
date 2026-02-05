@@ -2,21 +2,23 @@
 
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, Query
-
+from fastapi import APIRouter, Depends, Query, Request
 from app.domain.movie import SearchResponse
 from app.infrastructure.cache import InMemoryCache
 from app.services.search import SearchService
 
 router = APIRouter(prefix="/movies", tags=["movies"])
 
-_cache = InMemoryCache()
 _search_service = SearchService()
 
 
-def get_cache() -> InMemoryCache:
+def get_cache(request: Request) -> InMemoryCache:
     """Provide a shared cache instance for the API."""
-    return _cache
+    cache = getattr(request.app.state, "cache", None)
+    if cache is None:
+        cache = InMemoryCache()
+        request.app.state.cache = cache
+    return cache
 
 
 def get_search_service() -> SearchService:
@@ -26,6 +28,7 @@ def get_search_service() -> SearchService:
 
 @router.get("", response_model=SearchResponse)
 def list_movies(
+    request: Request,
     sort: str = Query(
         default="duration",
         description="Sort field (e.g., 'duration' or '-duration')",
