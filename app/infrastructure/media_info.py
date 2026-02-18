@@ -57,4 +57,3 @@ def _normalize_minutes(duration_ms: float) -> int:
     if duration_ms <= 0:
         return 0
     return max(0, int(round(duration_ms / 60000)))
-

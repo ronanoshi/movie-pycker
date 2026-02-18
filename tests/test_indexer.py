@@ -45,7 +45,9 @@ def test_scan_directory_filters_supported_extensions(tmp_path: Path) -> None:
     assert {movie.file_path for movie in results} == {movie1, movie2, movie3}
 
 
-def test_scan_directory_handles_missing_directory(caplog: pytest.LogCaptureFixture) -> None:
+def test_scan_directory_handles_missing_directory(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
     extractor = _FakeExtractor()
     indexer = Indexer(extractor)
     missing = Path("/path/does/not/exist")
@@ -57,7 +59,9 @@ def test_scan_directory_handles_missing_directory(caplog: pytest.LogCaptureFixtu
     assert any("does not exist" in record.message for record in caplog.records)
 
 
-def test_scan_directory_handles_file_path(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
+def test_scan_directory_handles_file_path(
+    tmp_path: Path, caplog: pytest.LogCaptureFixture
+) -> None:
     extractor = _FakeExtractor()
     indexer = Indexer(extractor)
     file_path = tmp_path / "not_a_dir.mp4"
@@ -87,4 +91,3 @@ def test_scan_directory_returns_movie_files(tmp_path: Path) -> None:
         )
     ]
     assert extractor.seen_paths == [movie]
-

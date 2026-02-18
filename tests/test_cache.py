@@ -76,5 +76,3 @@ def test_cache_initial_data_is_copied() -> None:
     initial["movie:2"] = _sample_movie("Movie 2", 130)
 
     assert cache.exists("movie:2") is False
-
-

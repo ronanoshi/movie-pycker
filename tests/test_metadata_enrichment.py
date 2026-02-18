@@ -9,7 +9,10 @@ import pytest
 
 from app.domain.movie import MovieFile
 from app.infrastructure.cache import InMemoryCache
-from app.services.metadata_enrichment import MetadataEnrichmentService, _normalize_filename
+from app.services.metadata_enrichment import (
+    MetadataEnrichmentService,
+    _normalize_filename,
+)
 
 
 class _FakeOmdbClient:
@@ -27,10 +30,21 @@ class _FakeOmdbClient:
 @pytest.mark.asyncio
 async def test_enrich_movies_uses_cache() -> None:
     cache = InMemoryCache()
-    client = _FakeOmdbClient(response={"title": "Cached", "genres": [], "plot": None, "runtime_minutes": None})
+    client = _FakeOmdbClient(
+        response={
+            "title": "Cached",
+            "genres": [],
+            "plot": None,
+            "runtime_minutes": None,
+        }
+    )
     service = MetadataEnrichmentService(client, cache)
 
-    movie = MovieFile(file_path=Path("/movies/cached.mp4"), filename="cached.mp4", duration_minutes=100)
+    movie = MovieFile(
+        file_path=Path("/movies/cached.mp4"),
+        filename="cached.mp4",
+        duration_minutes=100,
+    )
     cached_metadata = await service.enrich_movies([movie])
 
     # Second call should hit cache and avoid OMDb call.
@@ -46,7 +60,11 @@ async def test_enrich_movies_missing_omdb() -> None:
     client = _FakeOmdbClient(response=None)
     service = MetadataEnrichmentService(client, cache)
 
-    movie = MovieFile(file_path=Path("/movies/unknown.mkv"), filename="unknown.mkv", duration_minutes=95)
+    movie = MovieFile(
+        file_path=Path("/movies/unknown.mkv"),
+        filename="unknown.mkv",
+        duration_minutes=95,
+    )
     results = await service.enrich_movies([movie])
 
     assert results[0].title is None
@@ -59,11 +77,18 @@ async def test_enrich_movies_missing_omdb() -> None:
 async def test_enrich_movies_uses_runtime_when_duration_missing() -> None:
     cache = InMemoryCache()
     client = _FakeOmdbClient(
-        response={"title": "Short", "genres": ["Drama"], "plot": "Test", "runtime_minutes": 80}
+        response={
+            "title": "Short",
+            "genres": ["Drama"],
+            "plot": "Test",
+            "runtime_minutes": 80,
+        }
     )
     service = MetadataEnrichmentService(client, cache)
 
-    movie = MovieFile(file_path=Path("/movies/short.avi"), filename="short.avi", duration_minutes=0)
+    movie = MovieFile(
+        file_path=Path("/movies/short.avi"), filename="short.avi", duration_minutes=0
+    )
     results = await service.enrich_movies([movie])
 
     assert results[0].duration_minutes == 80
@@ -74,4 +99,3 @@ def test_normalize_filename_removes_year_and_separators() -> None:
     normalized = _normalize_filename(path)
 
     assert normalized == "The Matrix"
-

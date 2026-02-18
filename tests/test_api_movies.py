@@ -64,4 +64,3 @@ def test_list_movies_sort_descending() -> None:
     payload = response.json()
     durations = [movie["duration_minutes"] for movie in payload["results"]]
     assert durations == [120, 100]
-

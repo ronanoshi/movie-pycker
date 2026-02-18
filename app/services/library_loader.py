@@ -18,4 +18,3 @@ async def load_library(settings: Settings, cache: Cache) -> list[MovieMetadata]:
     omdb_client = OMDbClient(api_key=settings.omdb_api_key)
     enrichment = MetadataEnrichmentService(omdb_client, cache)
     return await enrichment.enrich_movies(movie_files)
-

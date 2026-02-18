@@ -38,7 +38,7 @@ class MovieFile(BaseModel):
     file_path: Path = Field(..., description="Full path to the movie file")
     filename: str = Field(..., description="Name of the movie file")
     duration_minutes: int = Field(
-        ..., 
+        ...,
         ge=0,  # Greater than or equal to 0 (validation)
         description="Duration of the movie in minutes"
     )

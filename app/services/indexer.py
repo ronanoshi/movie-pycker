@@ -54,4 +54,3 @@ def _iter_video_files(directory: Path) -> Iterable[Path]:
     for path in directory.rglob("*"):
         if path.is_file() and path.suffix.lower() in SUPPORTED_EXTENSIONS:
             yield path
-

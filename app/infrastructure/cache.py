@@ -61,5 +61,3 @@ class InMemoryCache(Cache):
     def get_all(self) -> Dict[str, MovieMetadata]:
         # Return a shallow copy to prevent external mutation of internal state.
         return dict(self._store)
-
-

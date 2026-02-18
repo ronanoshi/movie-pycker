@@ -76,5 +76,3 @@ def _build_metadata(movie: MovieFile, omdb_data: dict | None) -> MovieMetadata:
         plot=omdb_data.get("plot"),
         duration_minutes=duration_minutes,
     )
-
-

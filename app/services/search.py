@@ -47,7 +47,9 @@ class SearchService:
                 results.append(movie)
         return results
 
-    def _sort_movies(self, movies: List[MovieMetadata], sort: str) -> List[MovieMetadata]:
+    def _sort_movies(
+        self, movies: List[MovieMetadata], sort: str
+    ) -> List[MovieMetadata]:
         key, reverse = _parse_sort(sort)
         return sorted(movies, key=key, reverse=reverse)
 
@@ -78,5 +80,3 @@ def _parse_sort(sort: str) -> tuple[Callable[[MovieMetadata], int], bool]:
 
     # Default: no-op sort (stable) if unknown field
     return (lambda _movie: 0), False
-
-

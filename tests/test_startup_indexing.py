@@ -31,7 +31,7 @@ def test_startup_indexes_movies(tmp_path: Path, monkeypatch) -> None:
     monkeypatch.setattr(
         main_module,
         "get_settings",
-        lambda: Settings(_env_file=None),
+        lambda: Settings(_env_file=None)
     )
 
     env_vars = {
@@ -74,7 +74,7 @@ def test_startup_skips_indexing_when_disabled(tmp_path: Path, monkeypatch) -> No
     monkeypatch.setattr(
         main_module,
         "get_settings",
-        lambda: Settings(_env_file=None),
+        lambda: Settings(_env_file=None)
     )
 
     env_vars = {
@@ -91,4 +91,3 @@ def test_startup_skips_indexing_when_disabled(tmp_path: Path, monkeypatch) -> No
     payload = response.json()
     assert payload["results"] == []
     assert called == {"extract": 0, "fetch": 0}
-

@@ -72,5 +72,3 @@ def test_search_unknown_sort_is_stable() -> None:
 
     # Unknown sort keeps original order
     assert results == movies
-
-

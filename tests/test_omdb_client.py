@@ -47,7 +47,10 @@ async def test_fetch_movie_metadata_success() -> None:
     }
     response = _response_ok(payload)
 
-    with patch("app.infrastructure.omdb_client.httpx.AsyncClient", return_value=_MockAsyncClient(response)):
+    with patch(
+        "app.infrastructure.omdb_client.httpx.AsyncClient",
+        return_value=_MockAsyncClient(response)
+    ):
         result = await client.fetch_movie_metadata("Se7en")
 
     assert result == {
@@ -64,7 +67,10 @@ async def test_fetch_movie_metadata_not_found() -> None:
     payload = {"Response": "False", "Error": "Movie not found!"}
     response = _response_ok(payload)
 
-    with patch("app.infrastructure.omdb_client.httpx.AsyncClient", return_value=_MockAsyncClient(response)):
+    with patch(
+        "app.infrastructure.omdb_client.httpx.AsyncClient",
+        return_value=_MockAsyncClient(response)
+    ):
         result = await client.fetch_movie_metadata("Missing")
 
     assert result is None
@@ -82,7 +88,10 @@ async def test_fetch_movie_metadata_runtime_na() -> None:
     }
     response = _response_ok(payload)
 
-    with patch("app.infrastructure.omdb_client.httpx.AsyncClient", return_value=_MockAsyncClient(response)):
+    with patch(
+        "app.infrastructure.omdb_client.httpx.AsyncClient",
+        return_value=_MockAsyncClient(response)
+    ):
         result = await client.fetch_movie_metadata("Short")
 
     assert result == {
@@ -94,15 +103,19 @@ async def test_fetch_movie_metadata_runtime_na() -> None:
 
 
 @pytest.mark.asyncio
-async def test_fetch_movie_metadata_request_error(caplog: pytest.LogCaptureFixture) -> None:
+async def test_fetch_movie_metadata_request_error(
+    caplog: pytest.LogCaptureFixture
+) -> None:
     client = OMDbClient(api_key="test_key")
     request = httpx.Request("GET", "https://www.omdbapi.com/")
     error = httpx.RequestError("boom", request=request)
 
-    with patch("app.infrastructure.omdb_client.httpx.AsyncClient", return_value=_MockAsyncClient(error)):
+    with patch(
+        "app.infrastructure.omdb_client.httpx.AsyncClient",
+        return_value=_MockAsyncClient(error)
+    ):
         with caplog.at_level("WARNING"):
             result = await client.fetch_movie_metadata("Error")
 
     assert result is None
     assert any("OMDb request failed" in record.message for record in caplog.records)
-

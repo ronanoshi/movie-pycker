@@ -34,7 +34,7 @@ async def list_movies(
     request: Request,
     sort: str = Query(
         default="duration",
-        description="Sort field (e.g., 'duration' or '-duration')",
+        description="Sort field (e.g., 'duration' or '-duration')"
     ),
     cache: InMemoryCache = Depends(get_cache),
     search_service: SearchService = Depends(get_search_service),
