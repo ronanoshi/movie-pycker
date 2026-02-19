@@ -39,12 +39,12 @@ class Settings(BaseSettings):
     # Path type automatically converts string paths to Path objects
     movie_directory: Path = Field(
         ...,
-        description="Path to directory containing movie files",
+        description="Path to directory containing movie files"
     )
 
     omdb_api_key: str = Field(
         ...,
-        description="OMDb API key for movie metadata enrichment",
+        description="OMDb API key for movie metadata enrichment"
     )
 
     # Optional fields have default values
@@ -52,17 +52,17 @@ class Settings(BaseSettings):
     # Could also write: Optional[Path] = None (older syntax)
     cache_file: Path | None = Field(
         default=None,
-        description="Optional path to cache file for persistence",
+        description="Optional path to cache file for persistence"
     )
 
     auto_index_on_startup: bool = Field(
         default=True,
-        description="Automatically index movies when application starts",
+        description="Automatically index movies when application starts"
     )
 
     enable_cache: bool = Field(
         default=True,
-        description="Enable caching for indexed movies",
+        description="Enable caching for indexed movies"
     )
     
     @field_validator("movie_directory")

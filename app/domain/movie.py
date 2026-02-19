@@ -116,4 +116,3 @@ class SearchResponse(BaseModel):
         description="List of movies matching search criteria"
     )
 
-

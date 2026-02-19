@@ -47,9 +47,7 @@ class SearchService:
                 results.append(movie)
         return results
 
-    def _sort_movies(
-        self, movies: List[MovieMetadata], sort: str
-    ) -> List[MovieMetadata]:
+    def _sort_movies(self, movies: List[MovieMetadata], sort: str) -> List[MovieMetadata]:
         key, reverse = _parse_sort(sort)
         return sorted(movies, key=key, reverse=reverse)
 
@@ -60,7 +58,7 @@ def _matches_keywords(movie: MovieMetadata, keywords: List[str]) -> bool:
         [
             (movie.title or ""),
             (movie.plot or ""),
-            " ".join(movie.genres),
+            " ".join(movie.genres)
         ]
     ).lower()
     return any(keyword in haystack for keyword in keywords)

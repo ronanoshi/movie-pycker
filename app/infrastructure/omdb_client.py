@@ -13,9 +13,7 @@ logger = logging.getLogger(__name__)
 class OMDbClient:
     """Async client for the OMDb API (free tier)."""
 
-    def __init__(
-        self, api_key: str, base_url: str = "https://www.omdbapi.com/"
-    ) -> None:
+    def __init__(self, api_key: str, base_url: str = "https://www.omdbapi.com/") -> None:
         self._api_key = api_key
         self._base_url = base_url
 
@@ -43,7 +41,7 @@ class OMDbClient:
             "title": data.get("Title"),
             "genres": _parse_genres(data.get("Genre")),
             "plot": data.get("Plot"),
-            "runtime_minutes": _parse_runtime_minutes(data.get("Runtime")),
+            "runtime_minutes": _parse_runtime_minutes(data.get("Runtime"))
         }
 
 

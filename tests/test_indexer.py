@@ -46,7 +46,7 @@ def test_scan_directory_filters_supported_extensions(tmp_path: Path) -> None:
 
 
 def test_scan_directory_handles_missing_directory(
-    caplog: pytest.LogCaptureFixture,
+    caplog: pytest.LogCaptureFixture
 ) -> None:
     extractor = _FakeExtractor()
     indexer = Indexer(extractor)
@@ -60,7 +60,8 @@ def test_scan_directory_handles_missing_directory(
 
 
 def test_scan_directory_handles_file_path(
-    tmp_path: Path, caplog: pytest.LogCaptureFixture
+    tmp_path: Path,
+    caplog: pytest.LogCaptureFixture
 ) -> None:
     extractor = _FakeExtractor()
     indexer = Indexer(extractor)

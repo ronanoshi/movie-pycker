@@ -11,7 +11,7 @@ from app.domain.movie import MovieFile
 from app.infrastructure.cache import InMemoryCache
 from app.services.metadata_enrichment import (
     MetadataEnrichmentService,
-    _normalize_filename,
+    _normalize_filename
 )
 
 
@@ -35,7 +35,7 @@ async def test_enrich_movies_uses_cache() -> None:
             "title": "Cached",
             "genres": [],
             "plot": None,
-            "runtime_minutes": None,
+            "runtime_minutes": None
         }
     )
     service = MetadataEnrichmentService(client, cache)
@@ -43,7 +43,7 @@ async def test_enrich_movies_uses_cache() -> None:
     movie = MovieFile(
         file_path=Path("/movies/cached.mp4"),
         filename="cached.mp4",
-        duration_minutes=100,
+        duration_minutes=100
     )
     cached_metadata = await service.enrich_movies([movie])
 
@@ -63,7 +63,7 @@ async def test_enrich_movies_missing_omdb() -> None:
     movie = MovieFile(
         file_path=Path("/movies/unknown.mkv"),
         filename="unknown.mkv",
-        duration_minutes=95,
+        duration_minutes=95
     )
     results = await service.enrich_movies([movie])
 
@@ -81,13 +81,15 @@ async def test_enrich_movies_uses_runtime_when_duration_missing() -> None:
             "title": "Short",
             "genres": ["Drama"],
             "plot": "Test",
-            "runtime_minutes": 80,
+            "runtime_minutes": 80
         }
     )
     service = MetadataEnrichmentService(client, cache)
 
     movie = MovieFile(
-        file_path=Path("/movies/short.avi"), filename="short.avi", duration_minutes=0
+        file_path=Path("/movies/short.avi"),
+        filename="short.avi",
+        duration_minutes=0
     )
     results = await service.enrich_movies([movie])
 
