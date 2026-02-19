@@ -16,5 +16,9 @@ async def load_library(settings: Settings, cache: Cache) -> list[MovieMetadata]:
     movie_files = indexer.scan_directory(settings.movie_directory)
 
     omdb_client = OMDbClient(api_key=settings.omdb_api_key)
-    enrichment = MetadataEnrichmentService(omdb_client, cache)
+    enrichment = MetadataEnrichmentService(
+        omdb_client,
+        cache,
+        noise_tokens=settings.get_noise_tokens()
+    )
     return await enrichment.enrich_movies(movie_files)

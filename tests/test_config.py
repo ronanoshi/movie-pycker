@@ -158,3 +158,50 @@ def test_settings_cache_file_path(env_vars: dict) -> None:
     with patch.dict(os.environ, env_vars, clear=True):
         settings = Settings(_env_file=None)
         assert settings.cache_file == cache_path
+
+
+def test_settings_noise_tokens_default_is_empty(env_vars: dict) -> None:
+    """Test that get_noise_tokens() returns an empty list when not set."""
+    with patch.dict(os.environ, env_vars, clear=True):
+        settings = Settings(_env_file=None)
+        assert settings.get_noise_tokens() == []
+
+
+def test_settings_noise_tokens_from_comma_separated_string(env_vars: dict) -> None:
+    """Test that a comma-separated env var is parsed into a list."""
+    env_vars["FILENAME_NOISE_TOKENS"] = "1080p,BluRay,x265"
+
+    with patch.dict(os.environ, env_vars, clear=True):
+        settings = Settings(_env_file=None)
+        assert settings.get_noise_tokens() == ["1080p", "BluRay", "x265"]
+
+
+def test_settings_noise_tokens_strips_whitespace(env_vars: dict) -> None:
+    """Test that whitespace around tokens is trimmed."""
+    env_vars["FILENAME_NOISE_TOKENS"] = " 1080p , BluRay , x265 "
+
+    with patch.dict(os.environ, env_vars, clear=True):
+        settings = Settings(_env_file=None)
+        assert settings.get_noise_tokens() == ["1080p", "BluRay", "x265"]
+
+
+def test_settings_noise_tokens_ignores_empty_entries(env_vars: dict) -> None:
+    """Test that empty entries from extra commas are discarded."""
+    env_vars["FILENAME_NOISE_TOKENS"] = "1080p,,BluRay,"
+
+    with patch.dict(os.environ, env_vars, clear=True):
+        settings = Settings(_env_file=None)
+        assert settings.get_noise_tokens() == ["1080p", "BluRay"]
+
+
+def test_settings_noise_tokens_supports_compound_tokens(env_vars: dict) -> None:
+    """Test that compound tokens (with hyphens or spaces) survive parsing."""
+    env_vars["FILENAME_NOISE_TOKENS"] = "WEBRip-WORLD,Ac3 SNAKE,1080p"
+
+    with patch.dict(os.environ, env_vars, clear=True):
+        settings = Settings(_env_file=None)
+        assert settings.get_noise_tokens() == [
+            "WEBRip-WORLD",
+            "Ac3 SNAKE",
+            "1080p",
+        ]

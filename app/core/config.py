@@ -5,7 +5,7 @@ or .env files. Pydantic automatically validates types and provides helpful error
 """
 
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional
 
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -64,7 +64,24 @@ class Settings(BaseSettings):
         default=True,
         description="Enable caching for indexed movies"
     )
-    
+
+    filename_noise_tokens: str = Field(
+        default="",
+        description="Comma-separated tokens to strip from filenames before OMDb lookup"
+    )
+
+    def get_noise_tokens(self) -> List[str]:
+        """Parse the comma-separated noise tokens string into a list.
+
+        We store the field as ``str`` rather than ``List[str]`` because
+        pydantic-settings attempts JSON decoding on complex types *before*
+        Pydantic's own validators run.  A plain comma-separated value like
+        ``"1080p,720p,BluRay"`` is not valid JSON, so ``List[str]`` would
+        blow up at the settings-source level.  Keeping the field as ``str``
+        sidesteps that, and this helper gives callers a clean list.
+        """
+        return [t.strip() for t in self.filename_noise_tokens.split(",") if t.strip()]
+
     @field_validator("movie_directory")
     @classmethod
     def validate_movie_directory(cls, v: Path) -> Path:
